@@ -58,11 +58,15 @@ for g in groups:
     i+=1
 
 g_index = input("Please! Enter a Number: ")
+
 target_group=groups[int(g_index)]
+
 
 print('Fetching Members...')
 all_participants = []
 all_participants = client.get_participants(target_group, aggressive=True)
+
+
 
 print('Saving In file...')
 with open("Scrapped.csv","w",encoding='UTF-8') as f:#Enter your file name.

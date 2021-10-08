@@ -77,7 +77,19 @@ for group in groups:
     i += 1
 
 g_index = input("Enter a Number: ")
+y_index = input("Please! Enter the number for your group")
 target_group = groups[int(g_index)]
+your_group = groups[int(y_index)]
+
+your_participants = []
+your_participants = client.get_participants(your_group, aggressive=True)
+your_username = []
+your_access_hash = []
+
+for user in your_participants:
+    your_username.append(user.username)
+    your_access_hash.append(user.access_hash)
+
 
 target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash)
 
@@ -92,16 +104,35 @@ for user in users:
     try:
         print("Adding {}".format(user['id']))
         if mode == 1:
-            if user['username'] == "":
-                continue
-            user_to_add = client.get_input_entity(user['username'])
+            # if user['username'] == "":
+            #     continue
+            if(user['username']  in your_username):
+                print("user already in your group")
+                print(user["username"])
+            elif(user['username'] not in your_username):
+                print("new one", user["username"])
+                user_to_add = client.get_input_entity(user['username'])
+                client(InviteToChannelRequest(target_group_entity, [user_to_add]))
+                print("Waiting for 60-180 Seconds...")
+                time.sleep(random.randrange(60, 90))
+
+
+
         elif mode == 2:
-            user_to_add = InputPeerUser(user['id'], user['access_hash'])
+            if (user['access_hash'] in your_access_hash):
+                print("user already in your group")
+            elif (user['access_hash'] not in your_access_hash):
+                user_to_add = InputPeerUser(user['id'], user['access_hash'])
+                client(InviteToChannelRequest(target_group_entity, [user_to_add]))
+                print("Waiting for 60-180 Seconds...")
+                time.sleep(random.randrange(60, 90))
+
+
+
+
         else:
             sys.exit("Invalid Mode Selected. Please Try Again.")
-        client(InviteToChannelRequest(target_group_entity, [user_to_add]))
-        print("Waiting for 60-180 Seconds...")
-        time.sleep(random.randrange(60, 90))
+
     except PeerFloodError:
         print("Getting Flood Error from telegram. Script is stopping now. Please try again after some time.")
         print("Waiting {} seconds".format(SLEEP_TIME_2))
