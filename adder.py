@@ -114,7 +114,7 @@ for user in users:
                 user_to_add = client.get_input_entity(user['username'])
                 client(InviteToChannelRequest(target_group_entity, [user_to_add]))
                 print("Waiting for 60-180 Seconds...")
-                time.sleep(random.randrange(60, 90))
+                time.sleep(random.randrange(120, 180))
 
 
 
@@ -125,7 +125,7 @@ for user in users:
                 user_to_add = InputPeerUser(user['id'], user['access_hash'])
                 client(InviteToChannelRequest(target_group_entity, [user_to_add]))
                 print("Waiting for 60-180 Seconds...")
-                time.sleep(random.randrange(60, 90))
+                time.sleep(random.randrange(120, 180))
 
 
 
